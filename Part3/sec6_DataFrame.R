@@ -86,7 +86,7 @@ ncol(sales)      # 열의 개수
 nrow(sales)      # 행의 개수
 names(sales)     # 열이름 출력
 rownames(sales)  # 행이름 출력 
-rownames(sales) <- c("one","two","three","four")
+rownames(sales) <- c("one","two","three","four")      # 행이름을 변경 one, two, three, four
 sales
 sales[c(2,3,1),]      # sales의 모든 행의 순서를 2,3,1의 행순서로 출력
 sales[,c(1,2,4,3)]    # sales의 모든 열의 순서를 1,2,4,3의 열순서로 출력
