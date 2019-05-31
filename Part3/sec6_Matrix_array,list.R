@@ -63,3 +63,4 @@ list1
 list1$birth <- NULL      #list1의 birth의 키값에 'NULL'값을 부여, 키값을 
 list1
 
+
