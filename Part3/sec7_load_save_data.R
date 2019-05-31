@@ -53,12 +53,12 @@ library(sqldf)
 Furits
 Fruits
 
-write.csv(Fruits, "Fruits_sql.csv", quote=F, row.names=F)
+write.csv(Fruits, "Fruits_sql.csv", quote=F, row.names=F)         # SQL쿼리를 활용한 선택문
 fruit_2 <- read.csv.sql("Fruits_sql.csv",
                         sql="SELECT * FROM file WHERE Year = 2008")
 fruit_2
-
-
+fruit_3 <-subset(Fruits, Fruits$Year==2008)       # SQL쿼리와 같은 개념의 subset 명령어
+fruit_3
 
 # 엑셀 데이터 불러오기
 install.packages("XLConnect")
