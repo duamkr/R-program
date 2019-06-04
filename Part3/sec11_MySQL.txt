@@ -1,0 +1,105 @@
+CREATE TABLE if not exists Eagles (
+  backNo INT UNSIGNED NOT NULL,
+  NAME VARCHAR(10) NOT NULL,
+  POSITION VARCHAR(4) NOT NULL,
+  highschool VARCHAR(10),
+  hand VARCHAR(10),
+  PRIMARY KEY(backNo)
+  ) DEFAULT CHARSET=UTF8;
+
+
+INSERT INTO Eagles VALUES (22, '이태양','투수','순천효천고','우투우타');
+INSERT INTO Eagles(backNo, NAME,POSITION) VALUES(36, '장민재', '투수');    #원하는 테이블 선택후 VALUES로 입력
+
+INSERT INTO Eagles VALUES (38, '안영명','투수','천안북일고','우투우타'),
+(13, '최재훈','포수','덕수고','우투우타'),
+(52, '김태균','내야수','천안북일고','우투우타'),
+(43, '정은원','내야수','인천고','우투좌타'),
+(1, '하주석','내야수','신일고','우투좌타'),
+(50, '이성열','내야수','순천효천고','우투좌타'),
+(8, '정근우','외야수','부산고','우투우타'),
+(25, '최진행','외야수','덕수정보고','우투우타');
+SELECT * FROM eagles;
+
+
+UPDATE eagles SET highschool='광주제일고', hand = '우투우타'    # eagles테이블의 high, hand를 데이터 업데이트 어디를? 백넘버가 36번인 데이터를
+  WHERE backNo=36;
+UPDATE eagles SET POSITION = '외야수' WHERE backNo=50;          # backNo가 50 인 값의 position 컬럼의 값을 외야수로 변경 
+DELETE FROM eagles WHERE backNo=30 OR backNo=44;                # backNo가 30, 44인 데이터를 삭제
+
+C  insert into table명
+R  select "   " from table명
+U  update table명
+D  delete from table명
+
+CREATE VIEW picher AS SELECT * FROM eagles                      # Create view "생성될 뷰 이름" 이후 eagles 데이터셋에서 position 이 투수인 데이터 뷰 생성
+  WHERE POSITION LIKE '투수';
+
+DROP VIEW picher;     # picher 뷰 삭제
+
+CREATE VIEW infielder
+  AS SELECT backNo, NAME, highschool, hand FROM eagles          # 특정 컬럼은 제외하고 뷰를 만들수 있음(position 컬럼 제외)
+  WHERE POSITION LIKE '내야수';
+
+SELECT NOW(), CURDATE(), CURTIME();;     # 현재날짜시간, 현재날짜, 현재시간
+SELECT NAME, DATE_FORMAT(birthday, "%y%m%d") FROM eagles;     # 이름컬럼을 선택, date_format컬럼으로 보여준다(birthday의 %y%d%m <- 소문자는 2자리로만 표시)
+
+
+# 테이블 생성 (join 연습)
+
+CREATE TABLE girl_group(
+  _id INT PRIMARY KEY AUTO_INCREMENT,
+  NAME VARCHAR(32) NOT NULL,
+  debut DATE NOT NULL,
+  hit_song_id INT 
+  ) DEFAULT CHARSET=UTF8;
+  
+  CREATE TABLE sohg (
+    _id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(32) NOT NULL,
+    lyrics VARCHAR(32)
+    ) DEFAULT CHARSET=UTF8;
+
+# inner join 
+SELECT gg._id, gg.NAME, s.title            
+  FROM girl_group AS gg                        # FROM "테이블명" AS " " ->  girl_group테이블명을 "gg"라 하겠다
+  INNER JOIN sohg AS s
+  ON s._id = gg.hit_song_id;
+
+
+# 연습문제 1
+
+
+# 연습문제 2
+
+
+
+continent, region, name, population
+
+
+■ 연습 문제
+2009년도에 데뷔한 걸그룹 정보를 조회	(where debut between ‘2009-01-01’ and ‘2009-12-31’ 이용)
+
+SELECT * FROM girl_group WHERE debut BETWEEN '2009-01-01' AND '2009-12-31';
+
+2009년도에 데뷔한 걸그룹의 히트송은? 	(걸그룹 이름, 데뷔일, 히트송)
+
+SELECT gg.NAME, gg.debut, ss.title FROM girl_group AS gg INNER JOIN song AS ss ON ss._id=gg.hit_song_id WHERE debut BETWEEN '2009-01-01; AND '2009-12-31';
+
+
+대륙별로 국가숫자, GNP의 합, 평균 국가별 GNP는?
+SELECT continent, count(*), sum(gnp), avg(gnp) FROM country GROUP BY Continent;
+
+아시아 대륙에서 인구가 가장 많은 도시 10개를 내림차순으로 보여줄 것	(대륙명, 국가명, 도시명, 인구수)
+
+SELECT continent, region, name, population FROM country WHERE continent='asia' order by population DESC LIMIT 10;
+
+전 세계에서 인구가 가장 많은 10개 도시에서 사용하는 공식언어는?	(도시명, 인구수, 언어명)
+ name, population, language
+
+SELECT  c.NAME, c.population, cl.LANGUAGE FROM country AS c INNER JOIN countrylanguage AS cl ON cl.CountryCode = c.CODE ORDER BY population DESC LIMIT 10 ; 
+
+
+
+
+SELECT * FROM girl_group WHERE hit_song_id LIKE '1%';
