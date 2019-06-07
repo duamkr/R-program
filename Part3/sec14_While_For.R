@@ -101,9 +101,16 @@ getDenominator <- function(x) {
   return(den)
 }
 
-getDenominator(60)
+# for loop 에서 반복 구간 증가값 설정
+
+seq(1,5,2)     # 1~5 사이 값 2씩 증가
 
 
+sum <- 0                # 3~100까지 3증가분의 합
+  for(i in seq(3,100,3)) {
+    sum <- sum + i
+  }
+print(sum)
 
 
 
