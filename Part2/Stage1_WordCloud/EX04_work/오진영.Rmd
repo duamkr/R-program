@@ -2,14 +2,23 @@
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(include = FALSE, eval = FALSE)
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = TRUE,
+	warning = TRUE
+)
+```
+
+```{r include=FALSE}
 library(KoNLP)
 library(wordcloud)
 library(RColorBrewer)
 useSejongDic()
 library(stringr)
-setwd('D:/Workspace/R_Data_Analysis/Part2/Stage1_WordCloud/EX04_work')
+setwd('E:/workspace/R/R-program/Part2/Stage1_WordCloud/EX04_work')
 ```
+
+
 # 2015년 서울 응답소 1~12월 계절별 키워드 분석
 
 2015년 [서울 응답소](https://eungdapso.seoul.go.kr/)에 등록된 문의 내용 데이터를 키워드 중심으로 분석을 실시합니다. 봄(3~5월), 여름(6~8월), 가을(9~11월), 겨울(12~2월)의 1년간 서울시의 계절별 이슈사항을 정리해 보도록 합니다.
@@ -17,9 +26,7 @@ setwd('D:/Workspace/R_Data_Analysis/Part2/Stage1_WordCloud/EX04_work')
 
 ## 서울응답소 봄철(3~5월) 키워드 분석
  본 데이터는  [서울 응답소](https://eungdapso.seoul.go.kr/)에 3월~5월까지 등록된 민원사항의 데이터를 활용, 문장의 명사를 추출, 단순한 키워드를 나열합니다.
-
-
-```{r cars}
+```{r}
 txt <- readLines('data/응답소_봄.txt')
 answer1 <- sapply(txt,extractNoun,USE.NAMES = F)
 cdata <- unlist(answer1)
@@ -38,11 +45,10 @@ write(unlist(answer1),'answer_1.txt')
 rev <- read.table('answer_1.txt')
 wordcount <- table(rev)
 
-palete <- brewer.pal(9,"Set1")
-wordcloud(names(wordcount), freq = wordcount, scale = c(3,1), rot.per = 0.25, min.freq = 30,
+palete <- brewer.pal(9,"Set3")
+wordcloud(names(wordcount), freq = wordcount, scale = c(2,1), rot.per = 0.25, min.freq = 30,
           random.order = F, random.color = T, colors=palete)
 ```
-
 
 
 

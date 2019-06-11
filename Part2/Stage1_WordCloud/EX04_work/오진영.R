@@ -1,3 +1,6 @@
+install.packages('rJava')
+install.packages('KoNLP')
+Sys.setenv(JAVA_HOME="C:/Program Files/Java/jre1.8.0_212")
 library(KoNLP)
 library(wordcloud)
 library(RColorBrewer)
