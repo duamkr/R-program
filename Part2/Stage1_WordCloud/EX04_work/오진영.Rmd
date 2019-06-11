@@ -1,0 +1,139 @@
+---
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = FALSE, eval = FALSE)
+library(KoNLP)
+library(wordcloud)
+library(RColorBrewer)
+useSejongDic()
+library(stringr)
+setwd('D:/Workspace/R_Data_Analysis/Part2/Stage1_WordCloud/EX04_work')
+```
+# 2015년 서울 응답소 1~12월 계절별 키워드 분석
+
+2015년 [서울 응답소](https://eungdapso.seoul.go.kr/)에 등록된 문의 내용 데이터를 키워드 중심으로 분석을 실시합니다. 봄(3~5월), 여름(6~8월), 가을(9~11월), 겨울(12~2월)의 1년간 서울시의 계절별 이슈사항을 정리해 보도록 합니다.
+
+
+## 서울응답소 봄철(3~5월) 키워드 분석
+ 본 데이터는  [서울 응답소](https://eungdapso.seoul.go.kr/)에 3월~5월까지 등록된 민원사항의 데이터를 활용, 문장의 명사를 추출, 단순한 키워드를 나열합니다.
+
+
+```{r cars}
+txt <- readLines('data/응답소_봄.txt')
+answer1 <- sapply(txt,extractNoun,USE.NAMES = F)
+cdata <- unlist(answer1)
+answer1 <- str_replace_all(cdata,'[^[:alpha:]]','')
+answer1 <- gsub(' ','',answer1)
+
+txt <- readLines('data/gsub.txt')
+cnt_txt <- length(txt)
+i <- 1
+for (i in 1:cnt_txt) {
+  answer1 <- gsub((txt[i]),'',answer1)
+}
+answer1 <- Filter(function(x) {nchar(x) >= 2}, answer1)
+answer1 <- Filter(function(x) {nchar(x) <= 6}, answer1)
+write(unlist(answer1),'answer_1.txt')
+rev <- read.table('answer_1.txt')
+wordcount <- table(rev)
+
+palete <- brewer.pal(9,"Set1")
+wordcloud(names(wordcount), freq = wordcount, scale = c(3,1), rot.per = 0.25, min.freq = 30,
+          random.order = F, random.color = T, colors=palete)
+```
+
+
+
+
+## 서울응답소 여름철(6~8월) 키워드 분석
+ 본 데이터는  [서울 응답소](https://eungdapso.seoul.go.kr/)에 6월~8월까지 등록된 민원사항의 데이터를 활용, 문장의 명사를 추출, 단순한 키워드를 나열합니다.
+
+
+```{r pressure, echo=FALSE}
+txt <- readLines('data/응답소_여름.txt')
+answer2 <- sapply(txt,extractNoun,USE.NAMES = F)
+cdata <- unlist(answer2)
+answer2 <- str_replace_all(cdata,'[^[:alpha:]]','')
+answer2 <- gsub(' ','',answer2)
+
+txt <- readLines('data/gsub.txt')
+cnt_txt <- length(txt)
+i <- 1
+for (i in 1:cnt_txt) {
+  answer2 <- gsub((txt[i]),'',answer2)
+}
+answer2 <- Filter(function(x) {nchar(x) >= 2}, answer2)
+answer2 <- Filter(function(x) {nchar(x) <= 10}, answer2)
+write(unlist(answer2),'answer_2.txt')
+rev2 <- read.table('answer_2.txt')
+wordcount2 <- table(rev2)
+
+palete <- brewer.pal(9,"Set1")
+wordcloud(names(wordcount2), freq = wordcount2, scale = c(3,1), rot.per = 0.25, min.freq = 30,
+          random.order = F, random.color = T, colors=palete)
+
+```
+
+
+
+
+## 서울응답소 가을철(9~11월) 키워드 분석
+ 본 데이터는  [서울 응답소](https://eungdapso.seoul.go.kr/)에 9월~11월까지 등록된 민원사항의 데이터를 활용, 문장의 명사를 추출, 단순한 키워드를 나열합니다.
+ 
+ 
+```{r}
+
+txt <- readLines('data/응답소_가을.txt')
+answer3 <- sapply(txt,extractNoun,USE.NAMES = F)
+cdata <- unlist(answer3)
+answer3 <- str_replace_all(cdata,'[^[:alpha:]]','')
+answer3 <- gsub(' ','',answer3)
+
+txt <- readLines('data/gsub.txt')
+cnt_txt <- length(txt)
+i <- 1
+for (i in 1:cnt_txt) {
+  answer3 <- gsub((txt[i]),'',answer3)
+}
+answer3 <- Filter(function(x) {nchar(x) >= 2}, answer3)
+answer3 <- Filter(function(x) {nchar(x) <= 10}, answer3)
+write(unlist(answer3),'answer_3.txt')
+rev3 <- read.table('answer_3.txt')
+wordcount3 <- table(rev3)
+
+palete <- brewer.pal(9,"Set1")
+wordcloud(names(wordcount3), freq = wordcount3, scale = c(3,1), rot.per = 0.25, min.freq = 30,
+          random.order = F, random.color = T, colors=palete)
+```
+ 
+
+## 서울응답소 겨울철(12~2월) 키워드 분석
+본 데이터는  [서울 응답소](https://eungdapso.seoul.go.kr/)에 12~2월까지 등록된 민원사항의 데이터를 활용, 문장의 명사를 추출, 단순한 키워드를 나열합니다.
+ 
+ 
+```{r}
+txt <- readLines('data/응답소_겨울.txt')
+answer4 <- sapply(txt,extractNoun,USE.NAMES = F)
+cdata <- unlist(answer4)
+answer4 <- str_replace_all(cdata,'[^[:alpha:]]','')
+answer4 <- gsub(' ','',answer4)
+
+txt <- readLines('data/gsub.txt')
+cnt_txt <- length(txt)
+i <- 1
+for (i in 1:cnt_txt) {
+  answer4 <- gsub((txt[i]),'',answer4)
+}
+answer4 <- Filter(function(x) {nchar(x) >= 2}, answer4)
+answer4 <- Filter(function(x) {nchar(x) <= 10}, answer4)
+write(unlist(answer4),'answer_4.txt')
+rev4 <- read.table('answer_4.txt')
+wordcount4 <- table(rev4)
+
+palete <- brewer.pal(9,"Set1")
+wordcloud(names(wordcount4), freq = wordcount4, scale = c(2,1), rot.per = 0.25, min.freq = 35,
+          random.order = F, random.color = T, colors=palete)
+
+```
+ 
