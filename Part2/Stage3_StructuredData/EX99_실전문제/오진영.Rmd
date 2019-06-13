@@ -1,0 +1,92 @@
+---
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r include=FALSE}
+library(ggplot2)
+library(reshape2)
+windowsFonts(malgun = "맑은 고딕")
+theme_update(text = element_text(family = "malgun"))
+setwd('D:/Workspace/R_Data_Analysis/Part2/Stage3_StructuredData/EX99_실전문제')
+
+```
+
+
+## 도전미션 3-3. 취직하기 정말 어렵네요
+
+
+
+```{r 3-3}
+gg <- read.csv('2000-2013년 연령별실업율_연령별평균_세로.csv')
+gg_long <- melt(gg, id=c('연도'),
+                variable.name = '연령', value.name= '실업율')
+
+ggplot(gg_long, aes(x =연도, y =실업율, color = 연령, group=연령)) +
+  geom_line( size=1) +
+  scale_color_discrete(' ')+
+  geom_point(size = 1.5) +
+  geom_vline(xintercept=seq(0,14,1), linetype="dotted", size= 0.1) +
+  geom_hline(yintercept=seq(0,10,0.5), lty='dotted', size=0.1) +
+  theme_classic(base_family="malgun",base_size=10) +
+  theme(axis.text.x=element_text(angle=90, hjust=1, vjust=1,
+                                 colour="black", size=8)) +
+  ggtitle(paste('연령별 실업율 현황(단위 %) 출처 : 통계청')) +
+  theme(plot.title = element_text(family="malgun",
+                                  face = 'bold',
+                                  hjust = 0.5,
+                                  size = 25,
+                                  color = 'darkblue'))
+```
+
+## 도전미션 3-6. 콩나물 마을 버스 찾아달래요!
+
+
+
+```{r 3-6}
+bus <- read.csv('버스노선별이용현황합계.csv')
+bus$승차인원 <- bus$승차인원/1000
+bus$하차인원 <- bus$하차인원/1000
+bus1 <- melt(bus,id =c('버스노선번호'), variable.name = '승하차구분', value.name='승하차인원')
+
+ggplot(bus1, aes(x =버스노선번호, y = 승하차인원, fill = 승하차구분)) +
+  geom_bar(position= 'dodge', stat = 'identity') +
+  geom_vline(xintercept=seq(0,32,1), linetype="dotted", size= 0.1) +
+  geom_hline(yintercept=seq(0,300,10), lty='dotted', size=0.1, col = 'white') +
+  theme_classic(base_family="malgun",base_size=10) +
+  theme(axis.text.x=element_text(angle=90, hjust=1, vjust=1,
+                                 colour="black", size=8)) +
+    ggtitle(paste('서울 주요 마을 버스 이용 승객 현황(2014년 1월)','\n','단위(천명)')) +
+  theme(plot.title=element_text(face="bold", size=25,
+                                hjust=0.5, color="black")) +
+  geom_text(aes(label=승하차인원),color = 'dark orange',vjust=-0.3,size=3) 
+
+```
+
+
+## 도전미션 3-7. 마포 09번 마을 버스 이용현황 분석
+
+You can also embed plots, for example:
+
+
+```{r 3-7}
+mapo <- read.csv('마포09번이용현황.csv')
+mapo1 <- melt(mapo,id =c('정류소명'), variable.name = '승하차구분', value.name='승하차인원')
+
+ggplot(mapo1, aes(x =정류소명, y =승하차인원, color = 승하차구분, group=승하차구분)) +
+  geom_line(size=1) +
+  geom_point(size = 1.5) +
+  geom_vline(xintercept=seq(0,32,1), linetype="dotted", size= 0.1) +
+  geom_hline(yintercept=seq(0,40000,1000), lty='dotted', size=0.1) +
+  theme_classic(base_family="malgun",base_size=10) +
+  theme(axis.text.x=element_text(angle=90, hjust=1, vjust=1,
+                                 colour="black", size=8)) +
+  ggtitle(paste('마포 09번 마을버스 이용현황 분석')) +
+  theme(plot.title = element_text(family="malgun",
+                                  face = 'bold',
+                                  hjust = 0.5,
+                                  size = 20,
+                                  color = 'darkblue'))
+```
+
