@@ -1,0 +1,106 @@
+---
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+```
+# R 데이터 분석(19.06.14 평가)
+## 1. 문장을 좀 더 효율적으로 계산하시오
+
+
+```{r}
+vec1 <- seq(1:6) ; vec1
+vec2 <- seq(10,5,-1) ;vec2
+vec3 <- seq()
+vec4 <- seq()
+vec5 <- seq(1,11,2) ; vec5
+```
+
+## 2) 다음과 같이 네명의 학생이 중간 시험과 기말 시험을 봤다. 
+
+
+
+```{r}
+이름 <- c('강경학', '김태균', '이성열', '정은원')
+중간 <- c(90, 78, 94, 70)
+기말 <- c(50, 60, 90, 92)
+df_score <- data.frame(이름, 중간, 기말)
+df_score
+
+
+df_score2 <-df_score %>%
+  mutate(평균 = (중간 + 기말) / 2)
+df_score2
+```
+
+
+## 3. 2번 문제에 학점이라는 필드를 만들고, 평균 성적에 따라 학점을 부여하시오
+
+
+```{r}
+df_score2 <-df_score %>%
+  mutate(평균 = (중간 + 기말) / 2)
+df_score2
+
+```
+
+
+
+## 6. R 내장 데이터인 "mpg"를 이용하여 다음을 구하시오.
+
+```{r}
+View(mpg)
+mpg1 <- mpg
+mpg1 %>%
+  filter(manufacturer == 'toyota') %>%
+  mutate(cty_hwy_avg = cty + hwy / 2) %>%
+  arrange(desc(cty_hwy_avg)) %>%
+  head(3)
+```
+
+
+
+
+## 7. R 내장 데이터인 "mpg"를 이용하여 다음의 그래프를 그리시오
+
+```{r}
+mpg2 <- mpg1 %>%
+  group_by(manufacturer) %>%
+  filter(class == 'suv') %>%
+  summarise(cty_avg = mean(cty)) %>%
+  arrange(desc(cty_avg)) %>%
+  head(7)
+
+
+mpg2
+ggplot(mpg2, aes(x = manufacturer, y= cty_avg, fill = manufacturer)) +
+  geom_bar(position= 'dodge',stat='identity')
+```
+
+ 
+## 9. 실습 데이터중 야구성적.csv 파일을 이용하여 다음의 그래프를 그리시오
+
+```{r}
+setwd('D:/Workspace/R_Data_Analysis/Part2/Stage3_StructuredData/EX31_프로야구')
+
+options(digit = 4)
+base <- read.csv('야구성적.csv')
+base1 <-base %>%
+  mutate(ops = 출루율 + 장타율)%>%
+  mutate(연봉대비ops = (ops / 연봉) * 100)%>%
+  mutate(평균ops = sum(ops) / 25)%>%
+  mutate(ylabel = paste(sprintf("%4.1f", 연봉대비ops), '%', sep=''))
+View(base1)
+
+ggplot(base1, aes(x =선수명, y = 연봉대비출루율, fill = 선수명)) +
+  geom_bar(position= 'dodge', stat = 'identity') +
+  geom_text(aes(label=ylabel),color = 'black',vjust=-0.3,size=3) +
+  ggtitle(paste('연봉대비 OPS분석_선수별')) +
+  theme(plot.title=element_text(face="bold", size=10,
+                                hjust=0.5, color="black")) 
+
+```
+
+  # OPS(출류율 + 장타율)와 연봉대비OPS(OPS / 연봉 * 100)를 구하시오
