@@ -18,6 +18,16 @@ vec5 <- seq(1,11,2) ; vec5
 df_score <- data.frame(이름, 중간, 기말)
 df_score
 
+n <- c('강경학', '김태균', '이성열', '정은원') ; 이름
+m <- c(90, 78, 94, 70)
+h <- c(50, 60, 90, 92)
+df_score1 <- data.frame(이름=n, 중간=m, 기말=h)
+df_score1
+
+
+
+
+
 #  2-2) 위 자료에 평균이라는 필드를 추가하고 중간과 기말 시험의 평균을 구해서 평균이라는 필드에 할당하시오
 df_score2 <-df_score %>%
   mutate(평균 = (중간 + 기말) / 2)
@@ -30,7 +40,7 @@ df_score2 %>%
   mutate(학점 = ifelse(평균 >= 90, 'A',
                        ifelse(평균 >= 80, 'B',
                                 ifelse(평균 >= 70, 'C',
-                                         ifelse(평균 >= 60, 'D,','F')))))
+                                         ifelse(평균 >= 60, 'D','F')))))
 
 
 #4. 양의 정수를 매개변수로 받아 1에서부터 매개변수값까지 홀수를 더해서 그 결과를 리턴하는 함수 ddSum을 작성하고, oddSum(100)의 값을
@@ -43,24 +53,29 @@ oddSum <- function(pos) {
   return(100)
 }
 oddSum(100)
-#1~100까지 3의 배수의 합
-odd <- 1
-oddSum 
-  for(i in 1:i) {
-    if(i %% 3 = 0)
-     i = odd + i
-  }
-
-
-oddSum(10)
 
 #1~100까지 3의 배수의 합
-sum <- 0
-for(i in 1:100) {
-  if(i %% 3 = 0)
+oddSum <- function(pos) {
+  sum <- 0
+  for (i in seq(1, pos, 2)) {
     sum <- sum + i
+  }
+  return(sum)
 }
-print(sum)
+
+
+oddSum(50)
+
+#1~100까지 3의 배수의 합
+
+p3<- function(pos) {
+  sum <- 0
+    for(i in seq(1, pos, 2)) {
+    sum <- sum + i
+  }
+  return(sum)
+}
+p3(100)
 
 3.675+0.475*1.5
 
@@ -78,8 +93,9 @@ View(mpg)
 mpg1 <- mpg
 mpg1 %>%
   filter(manufacturer == 'toyota') %>%
-  mutate(cty_hwy_avg = cty + hwy / 2) %>%
-  arrange(desc(cty_hwy_avg)) %>%
+  group_by(model) %>%
+  summarise(avg = mean((cty + hwy)) / 2) %>%
+  arrange(desc(avg))%>%
   head(3)
 
 
@@ -95,7 +111,7 @@ mpg2 <- mpg1 %>%
 # 7-2) 막대 그래프 형식의 컬러그래프
 mpg2
 ggplot(mpg2, aes(x = manufacturer, y= cty_avg, fill = manufacturer)) +
-  geom_bar(position= 'dodge',stat='identity')
+  geom_bar(stat ='identity')
 
 
 
@@ -107,9 +123,12 @@ ggplot(diamonds, aes(x = clarity, fill = clarity)) +     # y값을 안주면 카
   geom_bar()
 
   # 8-2) clarity 따른 가격의 변화를 보여주는 그래프
+d1 <- diamonds %>%
+  group_by(clarity) %>%
+  summarise(price_mean = mean(price)) 
 
-
-
+ggplot(d1, aes(x = clarity, y = price_mean, fill = clarity)) +
+  geom_col()
 
 
 
@@ -121,13 +140,12 @@ options(digit = 4)
 base <- read.csv('야구성적.csv')
 base1 <-base %>%
   mutate(ops = 출루율 + 장타율)%>%
-  mutate(연봉대비ops = (ops / 연봉) * 100)%>%
-  mutate(평균ops = sum(ops) / 25)%>%
+  mutate(연봉대비ops = ops / 연봉 * 100) %>%
   mutate(ylabel = paste(sprintf("%4.1f", 연봉대비ops), '%', sep=''))
-View(base1)
+head(base1)
 
-ggplot(base1, aes(x =선수명, y = 연봉대비출루율, fill = 선수명)) +
-  geom_bar(position= 'dodge', stat = 'identity') +
+ggplot(base1, aes(x =선수명, y = 연봉대비ops, fill = 선수명)) +
+  geom_bar(stat = 'identity') +
   geom_text(aes(label=ylabel),color = 'black',vjust=-0.3,size=3) +
   ggtitle(paste('연봉대비 OPS분석_선수별')) +
   theme(plot.title=element_text(face="bold", size=10,
