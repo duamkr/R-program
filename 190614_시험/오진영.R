@@ -1,10 +1,12 @@
+library(dplyr)
+library(ggplot2)
 # 1. 문장을 좀 더 효율적으로 계산하시오
 
   # 1)
 vec1 <- seq(1:6) ; vec1
 vec2 <- seq(10,5,-1) ;vec2
-vec3 <- seq()
-vec4 <- seq()
+vec3 <- rep(1:3,each=2) ;vec3
+vec4 <- rep(1:3,2) ; vec4
 vec5 <- seq(1,11,2) ; vec5
 
 
@@ -25,30 +27,22 @@ df_score2
 # 3. 2번 문제에 학점이라는 필드를 만들고, 평균 성적에 따라 학점을 부여하시오
 
 df_score2 %>%
-  mutate(학점 = for (i in 1:length(df_score2$평균)) {
-    if(df_score2$평균[i] >=90) {
-      학점 <- c(학점,"A") } 
-    else if(80 <=df_score2$평균[i] <=90) {
-      학점 <- c(학점,"B") }
-}
-
-
-# 특정변수의 값이 10이상 = color-> "red", 6-9 color -> yellow, 그 이하 값 "green"
-colors <- c()
-for (i in 1:length(df_score2$평균)) {
-  if(df_score2$평균[i] >=90) {
-   학점 <- c(학점,"A") } 
-  else if(80 <=df_score2[i] <=90) {
-    학점 <- c(학점,"B") }
-  else {
-    colors <- c(colors,"green") }
-}
+  mutate(학점 = ifelse(평균 >= 90, 'A',
+                       ifelse(평균 >= 80, 'B',
+                                ifelse(평균 >= 70, 'C',
+                                         ifelse(평균 >= 60, 'D,','F')))))
 
 
 #4. 양의 정수를 매개변수로 받아 1에서부터 매개변수값까지 홀수를 더해서 그 결과를 리턴하는 함수 ddSum을 작성하고, oddSum(100)의 값을
 #   계산하시오. (단, for 반복문을 사용할 것)
-
-
+oddSum <- function(pos) {
+  sum <- 0 
+  for (i in seq(1, pos, 2)) {
+    sum <- sum + i
+  }
+  return(100)
+}
+oddSum(100)
 #1~100까지 3의 배수의 합
 odd <- 1
 oddSum 
@@ -68,12 +62,14 @@ for(i in 1:100) {
 }
 print(sum)
 
-
-
+3.675+0.475*1.5
 
 # 5. R 내장 데이터인 "iris":를 이용하여 다음을 구하시오
   # 5-1) "setosa"종 Sepal.Width의 Box Plot을 그려 이상치를 확인할 것
-  # 이상치를 제거하기 전과 후의 평균과 표준편차
+iris
+
+
+  # 5-2) 이상치를 제거하기 전과 후의 평균과 표준편차
 
 
 # 6. R 내장 데이터인 "mpg"를 이용하여 다음을 구하시오.
@@ -95,14 +91,27 @@ mpg2 <- mpg1 %>%
   summarise(cty_avg = mean(cty)) %>%
   arrange(desc(cty_avg)) %>%
   head(7)
+
 # 7-2) 막대 그래프 형식의 컬러그래프
 mpg2
 ggplot(mpg2, aes(x = manufacturer, y= cty_avg, fill = manufacturer)) +
   geom_bar(position= 'dodge',stat='identity')
 
+
+
+
 # 8. R 내장 데이터인 "diamonds"를 이용하여 다음의 그래프를 그리시오
   # 8-1) clarity 의 돗수를 보여주는 그래프
+head(diamonds)
+ggplot(diamonds, aes(x = clarity, fill = clarity)) +     # y값을 안주면 카운트해서 y로 축으로 지정됨
+  geom_bar()
+
   # 8-2) clarity 따른 가격의 변화를 보여주는 그래프
+
+
+
+
+
 
 # 9. 실습 데이터중 야구성적.csv 파일을 이용하여 다음의 그래프를 그리시오
   # OPS(출류율 + 장타율)와 연봉대비OPS(OPS / 연봉 * 100)를 구하시오
